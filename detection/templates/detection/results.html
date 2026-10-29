@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anomaly Detection Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: grey;
+            background-color: black;
+        }
+        .result {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .summary {
+            margin-bottom: 10px;
+        }
+        .scores {
+            font-weight: bold;
+            color: #16a085;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Anomaly Detection Results</h1>
+    {% for row in results %}
+    <div class="result">
+        <h2>Channel: {{ row.chan_id }}</h2>
+        <div class="summary">
+            <p>Normalized prediction error: {{ row.normalized_prediction_error }}</p>
+            <p>Anomaly class(es): {{ row.anomaly_classes }}</p>
+        </div>
+        <div class="scores">
+            <p>Predicted anomalies: {{ row.n_predicted_anoms }}</p>
+            <p>Anomaly sequences (start/end indices): {{ row.anomaly_sequences }}</p>
+        </div>
+        <div class="anomaly-scores">
+            <p>Anomaly scores: {{ row.anom_scores }}</p>
+            <p>Number of test values: {{ row.num_test_values }}</p>
+            <iframe src="{% static 'plots/channel_'|add:row.chan_id|add:'.html' %}" style="width:100%; height:500px;"></iframe>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
